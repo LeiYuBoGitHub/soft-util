@@ -13,4 +13,16 @@ public class StringUtilTest {
     void yesterday() {
 
     }
+
+    @Test
+    void getFirstUrl() {
+        String s = StringUtil.getFirstUrl("http://www.baidu.com/img/1234.jpg");
+        System.out.println(s);
+    }
+
+    @Test
+    void getLastUrl() {
+        String s = StringUtil.getLastUrl("http://www.baidu.com/img/1234.jpg");
+        System.out.println(s);
+    }
 }

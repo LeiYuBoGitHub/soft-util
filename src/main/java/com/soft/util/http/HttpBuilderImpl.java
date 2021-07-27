@@ -3,6 +3,7 @@ package com.soft.util.http;
 import com.alibaba.fastjson.JSONObject;
 import com.soft.util.StringUtil;
 import org.apache.http.Consts;
+import org.apache.http.Header;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -135,6 +136,33 @@ public class HttpBuilderImpl implements HttpBuilder {
         }
         httpPost.addHeader("Content-Type", "application/json");
         return httpPost;
+    }
+
+    /**
+     * 获取标准Http客户端
+     * @return 结果
+     */
+    public CloseableHttpClient getStandardHttpClient(){
+        return HttpClients.custom()
+                .setDefaultRequestConfig(HttpConfig.REQUESTCONFIG)
+                .build();
+    }
+
+    /**
+     * 返回信息异常提示
+     * @param response 结果
+     */
+    public static void responseException(CloseableHttpResponse response){
+        System.out.println("**********返回发生异常!已输出相关信息**********");
+        System.out.println("状态码:"+response.getStatusLine().getStatusCode());
+        System.out.println("国家:"+response.getLocale().getCountry());
+        System.out.println("-----返回头信息-----");
+        Header[] head = response.getAllHeaders();
+        for (Header header : head) {
+            System.out.println(header);
+        }
+        System.out.println("-----返回头信息-----");
+        System.out.println("**********返回发生异常!已输出相关信息**********");
     }
 
     private static void close() {

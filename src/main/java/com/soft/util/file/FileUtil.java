@@ -14,7 +14,7 @@ public class FileUtil {
      * @param text 文本
      * @param filePath 路径
      */
-    public void writeText(String text, String filePath) {
+    public static void writeText(String text, String filePath) {
         FileOutputStream fos;
         try {
             fos = new FileOutputStream(filePath);

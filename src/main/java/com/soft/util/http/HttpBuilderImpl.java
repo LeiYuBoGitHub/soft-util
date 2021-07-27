@@ -22,7 +22,11 @@ import java.util.Map;
  */
 public class HttpBuilderImpl implements HttpBuilder {
 
-    HttpConfig httpConfig = new HttpConfig();
+    public HttpBuilderImpl() {
+        httpConfig = new HttpConfig();
+    }
+
+    private HttpConfig httpConfig;
 
     private static CloseableHttpClient httpClient;
 
@@ -49,13 +53,9 @@ public class HttpBuilderImpl implements HttpBuilder {
 
     @Override
     public String get() {
-        if (StringUtil.isBlank(httpConfig.getUrl())) {
-            return null;
-        }
         httpClient = HttpClients.createDefault();
-        HttpGet get = new HttpGet(httpConfig.getUrl());
         try {
-            response = httpClient.execute(get);
+            response = httpClient.execute(httpGet());
             return EntityUtils.toString(response.getEntity(), "UTF-8");
         } catch (IOException e) {
             e.printStackTrace();
@@ -67,18 +67,9 @@ public class HttpBuilderImpl implements HttpBuilder {
 
     @Override
     public String post() {
-        if (StringUtil.isBlank(httpConfig.getUrl())) {
-            return null;
-        }
         httpClient = HttpClients.createDefault();
-        HttpPost httpPost = new HttpPost(httpConfig.getUrl());
-        if (StringUtil.isNotBlank(httpConfig.getParam())) {
-            StringEntity postEntity = new StringEntity(httpConfig.getParam(),"UTF-8");
-            httpPost.setEntity(postEntity);
-        }
-        httpPost.addHeader("Content-Type", "application/json");
         try {
-            response = httpClient.execute(httpPost);
+            response = httpClient.execute(httpPost());
             if (response != null) {
                 return EntityUtils.toString(response.getEntity(), Consts.UTF_8);
             }
@@ -90,16 +81,60 @@ public class HttpBuilderImpl implements HttpBuilder {
 
     @Override
     public InputStream getContent() {
+        httpClient = HttpClients.createDefault();
+        try {
+            response = httpClient.execute(httpGet());
+            if (response != null) {
+                return response.getEntity().getContent();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            close();
+        }
         return null;
     }
 
     @Override
     public InputStream postContent() {
+        if (StringUtil.isBlank(httpConfig.getUrl())) {
+            return null;
+        }
+        httpClient = HttpClients.createDefault();
+        try {
+            response = httpClient.execute(httpPost());
+            if (response != null) {
+                return response.getEntity().getContent();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
-    public static HttpBuilder builder() {
+    public HttpBuilder builder() {
+        httpConfig = new HttpConfig();
         return new HttpBuilderImpl();
+    }
+
+    private HttpGet httpGet() {
+        if (StringUtil.isBlank(httpConfig.getUrl())) {
+            return null;
+        }
+        return new HttpGet(httpConfig.getUrl());
+    }
+
+    private HttpPost httpPost() {
+        if (StringUtil.isBlank(httpConfig.getUrl())) {
+            return null;
+        }
+        HttpPost httpPost = new HttpPost(httpConfig.getUrl());
+        if (StringUtil.isNotBlank(httpConfig.getParam())) {
+            StringEntity postEntity = new StringEntity(httpConfig.getParam(),"UTF-8");
+            httpPost.setEntity(postEntity);
+        }
+        httpPost.addHeader("Content-Type", "application/json");
+        return httpPost;
     }
 
     private static void close() {

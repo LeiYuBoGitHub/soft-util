@@ -1,5 +1,7 @@
 package com.soft.util;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 import java.util.Random;
 import java.util.SortedMap;
@@ -26,6 +28,34 @@ public class StringUtil {
         }
         sb.append("</xml>");
         return sb.toString();
+    }
+
+    public static String md5(String input) {
+        // 获得MD5摘要算法的 MessageDigest 对象
+        MessageDigest messageDigest = null;
+        try {
+            messageDigest = MessageDigest.getInstance("MD5");
+        } catch (NoSuchAlgorithmException ignored) {
+            ignored.printStackTrace();
+        }
+        if (messageDigest == null) {
+            return null;
+        }
+        // 使用指定的字节更新摘要
+        messageDigest.update(input.getBytes());
+        // 获得密文
+        byte[] md = messageDigest.digest();
+        // 把密文转换成十六进制的字符串形式
+        StringBuilder hexString = new StringBuilder();
+        // 字节数组转换为 十六进制 数
+        for (byte b : md) {
+            String shaHex = Integer.toHexString(b & 0xFF);
+            if (shaHex.length() < 2) {
+                hexString.append(0);
+            }
+            hexString.append(shaHex);
+        }
+        return hexString.toString();
     }
 
     /**

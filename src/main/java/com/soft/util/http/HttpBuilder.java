@@ -1,5 +1,9 @@
 package com.soft.util.http;
 
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+
 import java.io.InputStream;
 import java.util.Map;
 
@@ -23,6 +27,27 @@ public interface HttpBuilder {
      * @return 结果
      */
     HttpBuilder param(String json);
+
+    /**
+     * 参数
+     * @param httpGet 参数
+     * @return 结果
+     */
+    HttpBuilder addGet(HttpGet httpGet);
+
+    /**
+     * 参数
+     * @param httpPost 参数
+     * @return 结果
+     */
+    HttpBuilder addPost(HttpPost httpPost);
+
+    /**
+     * 参数
+     * @param client 参数
+     * @return 结果
+     */
+    HttpBuilder addCloseableHttpClient(CloseableHttpClient client);
 
     /**
      * 参数

@@ -23,15 +23,15 @@ import java.util.Map;
  */
 public class HttpBuilderImpl implements HttpBuilder {
 
+    private final HttpConfig httpConfig;
+
+    private CloseableHttpClient httpClient;
+
+    private CloseableHttpResponse response;
+
     public HttpBuilderImpl() {
         httpConfig = new HttpConfig();
     }
-
-    private HttpConfig httpConfig;
-
-    private static CloseableHttpClient httpClient;
-
-    private static CloseableHttpResponse response;
 
     @Override
     public HttpBuilder url(String url) {
@@ -46,6 +46,24 @@ public class HttpBuilderImpl implements HttpBuilder {
     }
 
     @Override
+    public HttpBuilder addGet(HttpGet httpGet) {
+        httpConfig.setHttpGet(httpGet);
+        return this;
+    }
+
+    @Override
+    public HttpBuilder addPost(HttpPost httpPost) {
+        httpConfig.setHttpPost(httpPost);
+        return this;
+    }
+
+    @Override
+    public HttpBuilder addCloseableHttpClient(CloseableHttpClient client) {
+        httpConfig.setClient(client);
+        return this;
+    }
+
+    @Override
     public HttpBuilder param(Map<String, Object> map) {
         String json = JSONObject.toJSONString(map);
         httpConfig.setParam(json);
@@ -54,7 +72,11 @@ public class HttpBuilderImpl implements HttpBuilder {
 
     @Override
     public String get() {
-        httpClient = HttpClients.createDefault();
+        if (httpConfig.getClient() == null) {
+            httpClient = HttpClients.createDefault();
+        } else {
+            httpClient = httpConfig.getClient();
+        }
         try {
             response = httpClient.execute(httpGet());
             return EntityUtils.toString(response.getEntity(), "UTF-8");
@@ -68,7 +90,11 @@ public class HttpBuilderImpl implements HttpBuilder {
 
     @Override
     public String post() {
-        httpClient = HttpClients.createDefault();
+        if (httpConfig.getClient() == null) {
+            httpClient = HttpClients.createDefault();
+        } else {
+            httpClient = httpConfig.getClient();
+        }
         try {
             response = httpClient.execute(httpPost());
             if (response != null) {
@@ -113,12 +139,10 @@ public class HttpBuilderImpl implements HttpBuilder {
         return null;
     }
 
-    public HttpBuilder builder() {
-        httpConfig = new HttpConfig();
-        return new HttpBuilderImpl();
-    }
-
     private HttpGet httpGet() {
+        if (httpConfig.getHttpGet() != null) {
+            return httpGet();
+        }
         if (StringUtil.isBlank(httpConfig.getUrl())) {
             return null;
         }
@@ -126,6 +150,9 @@ public class HttpBuilderImpl implements HttpBuilder {
     }
 
     private HttpPost httpPost() {
+        if (httpConfig.getHttpPost() != null) {
+            return httpPost();
+        }
         if (StringUtil.isBlank(httpConfig.getUrl())) {
             return null;
         }
@@ -165,12 +192,12 @@ public class HttpBuilderImpl implements HttpBuilder {
         System.out.println("**********返回发生异常!已输出相关信息**********");
     }
 
-    private static void close() {
+    private void close() {
         close(response);
         close(httpClient);
     }
 
-    private static void close(CloseableHttpResponse response) {
+    private void close(CloseableHttpResponse response) {
         try {
             if (response != null) {
                 response.close();
@@ -181,7 +208,7 @@ public class HttpBuilderImpl implements HttpBuilder {
         }
     }
 
-    private static void close(CloseableHttpClient httpClient) {
+    private void close(CloseableHttpClient httpClient) {
         try {
             if (httpClient != null) {
                 httpClient.close();

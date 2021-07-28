@@ -2,6 +2,9 @@ package com.soft.util.http;
 
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
 
 /**
  * @author 野性的呼唤
@@ -41,6 +44,20 @@ public class HttpConfig {
 
     private String param;
 
+    private HttpGet httpGet;
+
+    private HttpPost httpPost;
+
+    private CloseableHttpClient client;
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
     public String getParam() {
         return param;
     }
@@ -49,11 +66,27 @@ public class HttpConfig {
         this.param = param;
     }
 
-    public String getUrl() {
-        return url;
+    public HttpGet getHttpGet() {
+        return httpGet;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setHttpGet(HttpGet httpGet) {
+        this.httpGet = httpGet;
+    }
+
+    public HttpPost getHttpPost() {
+        return httpPost;
+    }
+
+    public void setHttpPost(HttpPost httpPost) {
+        this.httpPost = httpPost;
+    }
+
+    public CloseableHttpClient getClient() {
+        return client;
+    }
+
+    public void setClient(CloseableHttpClient client) {
+        this.client = client;
     }
 }

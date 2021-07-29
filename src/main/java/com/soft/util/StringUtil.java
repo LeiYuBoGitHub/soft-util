@@ -92,8 +92,21 @@ public class StringUtil {
      */
     public static int randomNumber(int min,int max){
         Random random = new Random();
-        int num = random.nextInt(max)%(max - min + 1) + min;
-        return num;
+        return random.nextInt(max)%(max - min + 1) + min;
+    }
+
+    /**
+     * 生成多少位数字
+     * @param seat 位
+     * @return 结果
+     */
+    public static String randomNumber(int seat){
+        StringBuilder count = new StringBuilder();
+        for (int i = 0;i < 9; i++){
+            int a = randomNumber(0, 9);
+            count.append(a);
+        }
+        return count.toString();
     }
 
     /**
@@ -114,6 +127,26 @@ public class StringUtil {
      */
     public static String getFirstUrl(String url){
         return url.substring(0,url.lastIndexOf("/") + 1);
+    }
+
+    /**
+     * 字符串切割
+     * @param txt 文本
+     * @param spot 字符
+     * @param position 左/右
+     * @return 结果
+     */
+    public static String cutting(String txt, String spot, String position){
+        int length = txt.length();
+        int spotLength = spot.length();
+        int a = txt.indexOf(spot);
+        if (position.equals("l")){
+            return txt.substring(0,a);
+        }else if (position.equals("r")){
+            return txt.substring(a+spotLength,length);
+        }else{
+            return null;
+        }
     }
 
     /**

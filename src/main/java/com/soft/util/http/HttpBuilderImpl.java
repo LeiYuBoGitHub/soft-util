@@ -82,8 +82,6 @@ public class HttpBuilderImpl implements HttpBuilder {
             return EntityUtils.toString(response.getEntity(), "UTF-8");
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            close();
         }
         return null;
     }
@@ -116,8 +114,6 @@ public class HttpBuilderImpl implements HttpBuilder {
             }
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            close();
         }
         return null;
     }
@@ -192,7 +188,7 @@ public class HttpBuilderImpl implements HttpBuilder {
         System.out.println("**********返回发生异常!已输出相关信息**********");
     }
 
-    private void close() {
+    public void close() {
         close(response);
         close(httpClient);
     }

@@ -57,6 +57,11 @@ public interface HttpBuilder {
     HttpBuilder param(Map<String, Object> map);
 
     /**
+     * 关闭连接
+     */
+    void close();
+
+    /**
      * GET
      * @return 结果
      */

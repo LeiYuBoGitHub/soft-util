@@ -1,5 +1,6 @@
 package com.soft.util;
 
+import cn.hutool.crypto.digest.DigestUtil;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -11,7 +12,13 @@ public class StringUtilTest {
 
     @Test
     void yesterday() {
-
+        String x = DigestUtil.md5Hex("s");
+        System.out.println(x);
+        String r = x.substring(0,5).toUpperCase();
+        System.out.println(r);
+        String d = x.substring(5,10);
+        System.out.println(d);
+        System.out.println(r + d + "&*");
     }
 
     @Test

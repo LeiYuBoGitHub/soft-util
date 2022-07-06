@@ -1,5 +1,7 @@
 package com.soft.util;
 
+import cn.hutool.core.util.StrUtil;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
@@ -14,7 +16,7 @@ import java.util.regex.Pattern;
  * @date 2021/7/14 17:38
  * @description
  */
-public class StringUtil {
+public class StringUtil extends StrUtil {
 
     public static final String  NUMBER_FORMAT = "^[0-9]*$";
 
@@ -178,71 +180,6 @@ public class StringUtil {
      */
     public static boolean isNumeric(String str) {
         return StringUtil.isNotEmpty(str) && str.matches(StringUtil.NUMBER_FORMAT);
-    }
-
-    /**
-     * 判断字符串是否为空白，常见几种情况如下：
-     * <pre>
-     * StringUtils.isBlank(null)      = true
-     * StringUtils.isBlank("")        = true
-     * StringUtils.isBlank(" ")       = true
-     * StringUtils.isBlank("bob")     = false
-     * StringUtils.isBlank("  bob  ") = false
-     * </pre>
-     */
-    public static boolean isBlank(String str) {
-        int strLen;
-        if (null == str || (strLen = str.length()) == 0) {
-            return true;
-        }
-        for (int i = 0; i < strLen; i++) {
-            if ((!Character.isWhitespace(str.charAt(i)))) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * 判断字符串是否不为空白，常见几种情况如下：
-     * <pre>
-     * StringUtils.isNotBlank(null)      = false
-     * StringUtils.isNotBlank("")        = false
-     * StringUtils.isNotBlank(" ")       = false
-     * StringUtils.isNotBlank("bob")     = true
-     * StringUtils.isNotBlank("  bob  ") = true
-     * </pre>
-     */
-    public static boolean isNotBlank(String str) {
-        return !isBlank(str);
-    }
-
-    /**
-     * 判断字符串是否为空，常见几种情况如下：
-     * <pre>
-     * StringUtils.isEmpty(null)      = true
-     * StringUtils.isEmpty("")        = true
-     * StringUtils.isEmpty(" ")       = false
-     * StringUtils.isEmpty("bob")     = false
-     * StringUtils.isEmpty("  bob  ") = false
-     * </pre>
-     */
-    public static boolean isEmpty(String str) {
-        return null == str || str.length() == 0;
-    }
-
-    /**
-     * 判断字符串是否不为空，常见几种情况如下：
-     * <pre>
-     * StringUtils.isNotEmpty(null)      = false
-     * StringUtils.isNotEmpty("")        = false
-     * StringUtils.isNotEmpty(" ")       = true
-     * StringUtils.isNotEmpty("bob")     = true
-     * StringUtils.isNotEmpty("  bob  ") = true
-     * </pre>
-     */
-    public static boolean isNotEmpty(String str) {
-        return !StringUtil.isEmpty(str);
     }
 
 }
